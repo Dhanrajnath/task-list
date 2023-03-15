@@ -5,10 +5,9 @@ import com.codurance.training.tasks.service.IAddingService;
 import com.codurance.training.tasks.service.IAddingTaskService;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class AddingServiceImpl implements IAddingService, IAddingTaskService {
     private Map<String, List<Task>> tasks = new LinkedHashMap<>();
@@ -32,8 +31,17 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
         if (subcommand.equals("project")) {
             addProject(subcommandRest[1]);
         } else if (subcommand.equals("task")) {
-            String[] projectTask = subcommandRest[1].split(" ", 2);
-            addTask(projectTask[0], projectTask[1]);
+            String[] projectTask = subcommandRest[1].split(" ");
+            if (projectTask.length == 3){
+                try {
+                    addTask(projectTask[0], projectTask[1], new SimpleDateFormat("dd-MM-yyyy").parse(projectTask[2]));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else {
+                addTask(projectTask[0], projectTask[1], null);
+            }
         }
     }
 
@@ -43,13 +51,13 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
     }
 
     @Override
-    public void addTask(String project, String description) {
+    public void addTask(String project, String description, Date deadline) {
         List<Task> projectTasks = tasks.get(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
             return;
         }
-        projectTasks.add(new Task(nextId(), description, false));
+        projectTasks.add(new Task(nextId(), description, false, deadline));
     }
 }
