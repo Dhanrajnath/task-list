@@ -58,6 +58,6 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
             out.println();
             return;
         }
-        projectTasks.add(new Task(nextId(), description, false, deadline));
+        projectTasks.add(new Task(String.valueOf(nextId()), description, false, deadline));
     }
 }

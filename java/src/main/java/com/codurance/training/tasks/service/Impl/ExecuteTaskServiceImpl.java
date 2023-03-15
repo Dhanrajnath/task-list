@@ -16,8 +16,8 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
     private ICheckService checkService;
     private IShowService showService;
     private IHelpService helpService;
-
     private ITodayDueTasks todayDueTasks;
+    private IDeletingService deletingService;
 
     public ExecuteTaskServiceImpl(Map<String, List<Task>> tasks, BufferedReader in, PrintWriter out) {
         this.tasks = tasks;
@@ -28,6 +28,7 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
         showService = new ShowServiceImpl(tasks, this.out);
         helpService = new HelpServiceImpl(this.out);
         todayDueTasks = new TodayDueTasksImpl(tasks, this.out);
+        deletingService = new DeletingServiceImpl(tasks, this.out);
     }
 
     @Override
@@ -49,6 +50,9 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
                 break;
             case "today":
                 todayDueTasks.showTodayDueTasks();
+                break;
+            case "delete":
+                deletingService.deleteTask(commandRest[1]);
                 break;
             case "help":
                 helpService.help();

@@ -20,9 +20,10 @@ public class TodayDueTasksImpl implements ITodayDueTasks {
     public void showTodayDueTasks() {
         Date today = new Date();
         for (Map.Entry<String, List<Task>> project: tasks.entrySet()){
+            out.println(project.getKey());
             for (Task task: project.getValue()){
                 if (task.getDeadline() != null && DateHelper.parseDate(task.getDeadline()).equals(DateHelper.parseDate(today))) {
-                    out.printf("    [%c] %d: %s , deadline: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription(), task.getDeadline());
+                    out.printf("    [%c] %s: %s , deadline: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription(), task.getDeadline());
                 }
             }
             out.println();

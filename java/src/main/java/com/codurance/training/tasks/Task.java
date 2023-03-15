@@ -3,19 +3,19 @@ package com.codurance.training.tasks;
 import java.util.Date;
 
 public final class Task {
-    private final long id;
+    private final String id;
     private final String description;
     private boolean done;
     private Date deadline;
 
-    public Task(long id, String description, boolean done, Date deadline) {
+    public Task(String id, String description, boolean done, Date deadline) {
         this.id = id;
         this.description = description;
         this.done = done;
         this.deadline = deadline;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 

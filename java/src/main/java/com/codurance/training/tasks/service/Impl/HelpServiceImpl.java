@@ -20,6 +20,7 @@ public class HelpServiceImpl implements IHelpService {
         out.println("  check <task ID>");
         out.println("  uncheck <task ID>");
         out.println("  today -> to view today's due tasks");
+        out.println("  delete <task id>");
         out.println();
     }
 }

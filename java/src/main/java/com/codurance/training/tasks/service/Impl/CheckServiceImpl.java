@@ -31,7 +31,7 @@ public class CheckServiceImpl implements ICheckService {
         int id = Integer.parseInt(idString);
         for (Map.Entry<String, List<Task>> project : tasks.entrySet()) {
             for (Task task : project.getValue()) {
-                if (task.getId() == id) {
+                if (task.getId().equals(id)) {
                     task.setDone(done);
                     return;
                 }
