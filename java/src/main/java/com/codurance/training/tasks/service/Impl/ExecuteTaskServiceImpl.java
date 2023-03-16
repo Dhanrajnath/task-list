@@ -18,7 +18,9 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
     private IHelpService helpService;
     private ITodayDueTasks todayDueTasks;
     private IDeletingService deletingService;
-    private ITaskViewService taskViewService;
+    private ITaskViewService taskViewServiceByDate;
+    private ITaskViewService taskViewServiceByDeadline;
+    private ITaskViewService taskViewServiceByProject;
 
     public ExecuteTaskServiceImpl(Map<String, List<Task>> tasks, BufferedReader in, PrintWriter out) {
         this.tasks = tasks;
@@ -30,7 +32,10 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
         helpService = new HelpServiceImpl(this.out);
         todayDueTasks = new TodayDueTasksImpl(tasks, this.out);
         deletingService = new DeletingServiceImpl(tasks, this.out);
-        taskViewService = new TaskViewServiceImpl(tasks, this.out);
+        taskViewServiceByDate = new TaskViewByDate(tasks, this.out);
+        taskViewServiceByDeadline = new TaskViewByDeadline(tasks, this.out);
+        taskViewServiceByProject = new TaskViewByProject(tasks, this.out);
+
     }
 
     @Override
@@ -60,13 +65,13 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
                 String viewBy = commandRest[1];
                 switch (viewBy){
                     case "byDate":
-                        taskViewService.viewByDate();
+                        taskViewServiceByDate.view();
                         break;
                     case "byDeadline":
-                        taskViewService.viewByDeadline();
+                        taskViewServiceByDeadline.view();
                         break;
                     case "byProject":
-                        taskViewService.viewByProject();
+                        taskViewServiceByProject.view();
                         break;
                 }
                 break;
