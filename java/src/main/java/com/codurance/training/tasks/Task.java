@@ -7,12 +7,14 @@ public final class Task {
     private final String description;
     private boolean done;
     private Date deadline;
+    private Date createdDate;
 
-    public Task(String id, String description, boolean done, Date deadline) {
+    public Task(String id, String description, boolean done, Date deadline, Date createdDate) {
         this.id = id;
         this.description = description;
         this.done = done;
         this.deadline = deadline;
+        this.createdDate = createdDate;
     }
 
     public String getId() {
@@ -37,6 +39,14 @@ public final class Task {
 
     public void setDeadline(Date deadline) {
         this.deadline = deadline;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
 }

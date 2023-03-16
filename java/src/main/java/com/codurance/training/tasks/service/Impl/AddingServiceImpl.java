@@ -8,6 +8,8 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AddingServiceImpl implements IAddingService, IAddingTaskService {
     private Map<String, List<Task>> tasks = new LinkedHashMap<>();
@@ -24,6 +26,15 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
         return ++lastId;
     }
 
+    private boolean isValidIdentifier(String id) {
+        if(id.contains(" "))
+            return false;
+
+        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+        Matcher matcher = pattern.matcher(id);
+        return !(matcher.find());
+    }
+
     @Override
     public void add(String commandLine) {
         String[] subcommandRest = commandLine.split(" ", 2);
@@ -32,15 +43,15 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
             addProject(subcommandRest[1]);
         } else if (subcommand.equals("task")) {
             String[] projectTask = subcommandRest[1].split(" ");
-            if (projectTask.length == 3){
+            if (projectTask.length == 4){
                 try {
-                    addTask(projectTask[0], projectTask[1], new SimpleDateFormat("dd-MM-yyyy").parse(projectTask[2]));
+                    addTask(projectTask[1], projectTask[0], projectTask[2], new SimpleDateFormat("dd-MM-yyyy").parse(projectTask[3]));
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
             }
             else {
-                addTask(projectTask[0], projectTask[1], null);
+                addTask(projectTask[1], projectTask[0], projectTask[2], null);
             }
         }
     }
@@ -51,13 +62,20 @@ public class AddingServiceImpl implements IAddingService, IAddingTaskService {
     }
 
     @Override
-    public void addTask(String project, String description, Date deadline) {
+    public void addTask(String taskId,String project, String description, Date deadline) {
         List<Task> projectTasks = tasks.get(project);
         if (projectTasks == null) {
             out.printf("Could not find a project with the name \"%s\".", project);
             out.println();
             return;
         }
-        projectTasks.add(new Task(String.valueOf(nextId()), description, false, deadline));
+        if (isValidIdentifier(taskId)){
+            projectTasks.add(new Task(taskId, description, false, deadline, new Date()));
+        }
+        else{
+            out.printf("Identifier ID is not valid:", taskId);
+            out.printf("Using the auto-increment value by default...", String.valueOf(nextId()));
+            projectTasks.add(new Task(String.valueOf(nextId()), description, false, deadline, new Date()));
+        }
     }
 }

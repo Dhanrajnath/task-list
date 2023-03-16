@@ -23,7 +23,7 @@ public class TodayDueTasksImpl implements ITodayDueTasks {
             out.println(project.getKey());
             for (Task task: project.getValue()){
                 if (task.getDeadline() != null && DateHelper.parseDate(task.getDeadline()).equals(DateHelper.parseDate(today))) {
-                    out.printf("    [%c] %s: %s , deadline: %s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription(), task.getDeadline());
+                    out.printf("    [%c] %s: %s, deadline: %s, createdDate:%s%n", (task.isDone() ? 'x' : ' '), task.getId(), task.getDescription(), task.getDeadline(), task.getCreatedDate());
                 }
             }
             out.println();

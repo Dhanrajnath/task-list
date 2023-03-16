@@ -18,6 +18,7 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
     private IHelpService helpService;
     private ITodayDueTasks todayDueTasks;
     private IDeletingService deletingService;
+    private ITaskViewService taskViewService;
 
     public ExecuteTaskServiceImpl(Map<String, List<Task>> tasks, BufferedReader in, PrintWriter out) {
         this.tasks = tasks;
@@ -29,6 +30,7 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
         helpService = new HelpServiceImpl(this.out);
         todayDueTasks = new TodayDueTasksImpl(tasks, this.out);
         deletingService = new DeletingServiceImpl(tasks, this.out);
+        taskViewService = new TaskViewServiceImpl(tasks, this.out);
     }
 
     @Override
@@ -53,6 +55,20 @@ public class ExecuteTaskServiceImpl implements IExecuteTaskService {
                 break;
             case "delete":
                 deletingService.deleteTask(commandRest[1]);
+                break;
+            case "view":
+                String viewBy = commandRest[1];
+                switch (viewBy){
+                    case "byDate":
+                        taskViewService.viewByDate();
+                        break;
+                    case "byDeadline":
+                        taskViewService.viewByDeadline();
+                        break;
+                    case "byProject":
+                        taskViewService.viewByProject();
+                        break;
+                }
                 break;
             case "help":
                 helpService.help();
